@@ -1,0 +1,10 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "123",
+      "database": "${workspaceFolder:zonoBi-backend}/app.db"
+    }
+  ]
+}

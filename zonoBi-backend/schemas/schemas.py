@@ -11,6 +11,8 @@ from pydantic import BaseModel, Field
 
 # ---------------------------------------------------------------
 # TODO pydantic校验用field，路径参数校验使用path，查询参数校验使用Query
+
+
 class Token(BaseModel):
     """
     @description  :
@@ -18,15 +20,17 @@ class Token(BaseModel):
     """
     access_token: str
     token_type: str
-    
+
+
 class UserBase(BaseModel):
     """
     @description  :用户类
     """
     username: str
 
+
 class UserInDB(UserBase):
-    password: str=Field(description='密码')#继承，响应中不包含该类
+    password: str = Field(description='密码')  # 继承，响应中不包含该类
 
 
 class User(UserBase):
@@ -36,7 +40,7 @@ class User(UserBase):
     """
     id: int
     is_active: bool
-    
+
     class Config:
         orm_mode = True
 
@@ -53,15 +57,15 @@ class User(UserBase):
 #         orm_mode = True#配置，告诉Pydantic，该类不是dict，而是ORM模型，读取数据不是data[id]，而是data.id
 
 
-
 class articleBase(BaseModel):
     title: str
     channels_id: int
-    content: str 
+    content: str
 
     class Config:
         orm_mode = True
 
-class articleCreate(articleBase):
-    pass
 
+class articleCreate(articleBase):
+    owner_id: int
+    pass

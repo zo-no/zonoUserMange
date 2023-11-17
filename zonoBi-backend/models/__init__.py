@@ -2,5 +2,5 @@
 '''
 @Date		:2023/10/07 09:01:31
 @Author		:zono
-@Description:模型库
+@Description:模型库模型，封装类
 '''

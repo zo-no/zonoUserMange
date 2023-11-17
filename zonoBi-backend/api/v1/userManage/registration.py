@@ -10,19 +10,21 @@ from passlib.context import CryptContext
 
 from sqlalchemy.orm import Session
 
-from database.sqlite import engine,Base,SessionLocal
+from database.sqlite import engine, Base, SessionLocal
 from crud import crud
 from schemas import schemas
-
 
 
 reg = APIRouter()
 
 Base.metadata.create_all(bind=engine)
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")#使用bcrypt算法对密码加密
+pwd_context = CryptContext(
+    schemes=["bcrypt"], deprecated="auto")  # 使用bcrypt算法对密码加密
 
 # Dependency
+
+
 def get_db():
     """
     @description  :
@@ -33,6 +35,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 def get_password_hash(password: str):
     """
@@ -45,20 +48,36 @@ def get_password_hash(password: str):
     """
     return pwd_context.hash(password)
 
+
+def userPasswordCheck(userPassword):
+    """
+    @description  :密码校验
+    """
+    pass
+
+
 @reg.post("/reg/", response_model=schemas.User, summary="注册接口")
 async def registration(user: schemas.UserInDB, db: Session = Depends(get_db)):
     """
     @description  :
-    注册接口，对传入的账号密码进行注册，并把数据加入数据库，密码哈希一次
+    注册接口，对传入的账号密码进行审核后注册，如果数据库无该用户就允许注册
+    并把数据加入数据库，密码哈希一次，
+    校验交给前端吧。
+    也可以https://blog.csdn.net/qq_39147299/article/details/117438065
     @param  :
     username:学号
     password:密码
     @Returns  :
     -------
     """
+    # 先校验
+
+    # 查数据库
     db_user = crud.get_user_by_username(db, username=user.username)
     if db_user:
         raise HTTPException(status_code=400, detail="该用户名已经被使用")
+    # 加密传入
+    # TODO盐值？
     user.password = get_password_hash(user.password)
     crud.create_user(db=db, user=user)
     raise HTTPException(status_code=200, detail="成功创建用户")
