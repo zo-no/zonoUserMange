@@ -1,0 +1,10 @@
+fastapi==0.103.2
+jose==1.0.0
+passlib==1.7.4
+pydantic==1.10.11
+python-dotenv==1.0.0
+python_jose==3.2.0
+python-multipart==0.0.6
+SQLAlchemy==1.4.46
+uvicorn==0.23.2
+Jinja2==3.1.2

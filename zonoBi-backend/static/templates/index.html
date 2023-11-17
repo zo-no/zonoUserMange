@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FastApi</title>
+    <link rel="stylesheet" href="../static/css/login.css">
+    <script src="../js/login.js"></script>
+
+    <body>
+        <div class="container">
+        <!-- 注册表单 -->
+            <h2>login</h2>
+            <form id="register-form">
+                <label for="register-username">用户名:</label>
+                <input type="text" id="register-username" name="username" required>
+                <br>
+                <label for="register-password">密码:</label>
+                <input type="password" id="register-password" name="password" required>
+                <br>
+                <button type="button" onclick="login()">注册</button>
+            </form>
+            <p>Don't you have an account?<a href="#register">登录</a></p>
+        </div>
+        <!-- 登录表单 -->
+        <div class="container" id="register">
+            <h2>register</h2>
+            <form id="login-form">
+                <label for="login-username">用户名:</label>
+                <input type="text" id="login-username" name="username" required>
+                <br>
+                <label for="login-password">密码:</label>
+                <input type="password" id="login-password" name="password" required>
+                <br>
+                <button type="button" onclick="register()">注册</button>
+            </form>
+            <p>already have an account?<a href="#login">login here</a></p>
+        </div>
+    
+        <!-- 显示用户信息 -->
+        <h2>用户信息(后台是所有)</h2>
+        <button type="button" onclick="getUserInfo()">获取</button>
+        <div id="user-info"></div>
+    </body>
+</html>

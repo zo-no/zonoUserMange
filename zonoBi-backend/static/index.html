@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FasTapi</title>
+
+    <body>
+        <h1>用户注册和登录</h1>
+    
+        <!-- 注册表单 -->
+        <h2>注册</h2>
+        <form id="register-form">
+            <label for="register-username">用户名:</label>
+            <input type="text" id="register-username" name="username" required>
+            <br>
+            <label for="register-password">密码:</label>
+            <input type="password" id="register-password" name="password" required>
+            <br>
+            <button type="button" onclick="register()">注册</button>
+        </form>
+    
+        <!-- 登录表单 -->
+        <h2>登录</h2>
+        <form id="login-form">
+            <label for="login-username">用户名:</label>
+            <input type="text" id="login-username" name="username" required>
+            <br>
+            <label for="login-password">密码:</label>
+            <input type="password" id="login-password" name="password" required>
+            <br>
+            <button type="button" onclick="login()">登录</button>
+        </form>
+    
+        <!-- 显示用户信息 -->
+        <h2>用户信息</h2>
+        <button type="button" onclick="getUserInfo()">获取</button>
+        <div id="user-info"></div>
+    </body>
+<script>
+    // 注册函数
+    function register() {
+        // const serverURL = 'http://localhost:5000'; // 提取服务器地址,因为是挂载到后端所以不需要
+        const username = document.getElementById("register-username").value;
+        const password = document.getElementById("register-password").value;
+
+        // 发送注册请求到后端
+        fetch('/api/v1/reg/', {
+            method: "POST",
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        })
+            .then(response => response.json())
+            .then(data => alert(data.detail));
+    }
+
+    // 登录函数
+    function login() {
+        //获取账号密码
+        const username = document.getElementById("login-username").value;
+        const password = document.getElementById("login-password").value;
+
+        //创建表单数据
+        const data = new URLSearchParams();
+        data.append('grant_type', '');
+        data.append('username', username);
+        data.append('password', password);
+        data.append('scope', '');
+        data.append('client_id', '');
+        data.append('client_secret', '');
+
+        // 发送登录请求到后端
+        fetch("/api/v1/token", {
+            method: "POST",
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: data
+        })
+            .then(response => response.json())
+            .then(data => {
+                const token = data.access_token;
+                if (token) {
+                    localStorage.setItem("token", token);//储存token到本地
+                    alert("登录成功！");
+                } else {
+                    alert("登录失败：" + data.detail);
+                }
+            });
+    }
+
+    // 获取用户信息函数
+    function getUserInfo() {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            // 发送令牌以获取用户信息
+            fetch("/api/v1/users/me", {
+                method: 'GET',
+                headers: {
+                    'accept': 'application/json',
+                    'Authorization': "Bearer " + token
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (data[0].username) {
+                        document.getElementById("user-info").innerHTML = "用户名: " + data[0].username;
+                    } else {
+                        document.getElementById("user-info").innerHTML = "无法获取用户信息。";
+                    }
+                });
+        } else {
+            document.getElementById("user-info").innerHTML = "用户未登录。";
+        }
+    }
+
+</script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin: 20px 0;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    form {
+        width: 300px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+    }
+
+    button {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    #user-info {
+        width: 300px;
+        margin: 20px auto;
+        text-align: center;
+    }
+</style>
+</html>
