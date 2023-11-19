@@ -68,10 +68,10 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer123' + tokenMsg,
+      'Authorization': 'Bearer ' + tokenMsg,
     },
     // data: body,
-    // ...(options || {}),
+    ...(options || {}),
   });
 }
 
