@@ -80,6 +80,19 @@ def create_article(db: Session, article_data: schemas.articleCreate):
     return db_article
 
 
+def get_article(db: Session):
+    """
+    @description  :
+    获取对应用户所有表
+    @param  :
+    -------
+    @Returns  :
+    -------
+    """
+    dbu = db.query(base.User).get(1)
+    return dbu.articles[2]
+
+
 if __name__ == "__main__":
     # 增
     s = base.User({

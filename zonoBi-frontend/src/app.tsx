@@ -5,13 +5,13 @@ import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { SettingDrawer } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
 import { history, Link } from '@umijs/max';
+import type { RequestConfig } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { errorConfig } from './requestErrorConfig';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
-
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
@@ -125,11 +125,26 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   };
 };
 
+const authHeaderInterceptor = (url: string, options: RequestConfig) => {
+  /*
+  @Description: 请求数据使用token
+  */
+  const authHeader = { Authorization: 'Bearer' };
+  return {
+    url: `${url}`,
+    options: { ...options, interceptors: true, headers: authHeader },
+  };
+};
+
 /**
  * @name request 配置，可以配置错误处理
  * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
  * @doc https://umijs.org/docs/max/request#配置
  */
-export const request = {
+export const request: RequestConfig = {
   ...errorConfig,
+  //直接配置axios
+  timeout: 1000,
+  baseURL: 'http://localhost:5000/api/v1', // 配置请求路径//TODO修改为线上环境
+  requestInterceptors: [authHeaderInterceptor], //TODO开发请求拦截器
 };

@@ -1,4 +1,11 @@
 {
   "cSpell.words": ["fastapi", "sqlalchemy"],
-  "sqltools.connections": []
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "zono",
+      "database": "${workspaceFolder:zonoUserMange}/zonoBi-backend/app.db"
+    }
+  ]
 }
