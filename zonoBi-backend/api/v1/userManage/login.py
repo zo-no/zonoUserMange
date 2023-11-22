@@ -24,11 +24,11 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-loginUP = APIRouter()
+loginUP = APIRouter(prefix="/login")
 
 Base.metadata.create_all(bind=engine)
 
-# ------------------------初始化设置---------------------------------------
+# TODO 加入配置文件中------------------------初始化设置---------------------------------------
 SECRET_KEY = "efb8d310a2e46e859a8e2f196ad25ff41916c90828999d64d50699f4f6cae93c"  # TODO 加入配置中
 ALGORITHM = "HS256"  # 算法变量
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 过期时间
@@ -36,7 +36,8 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 过期时间
 
 pwd_context = CryptContext(
     schemes=["bcrypt"], deprecated="auto")  # 使用bcrypt算法对密码加密
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/token")  # 用户校验地址
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/api/v1/login/account")  # 用户校验地址
 
 
 # ---------------------------------------------------------------
@@ -109,7 +110,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 # --------------------------接口调用-------------------------------------
 
 
-@loginUP.post("/token", response_model=schemas.Token, summary="获取Token")
+@loginUP.post("/account", response_model=schemas.Token, summary="获取Token")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """
     @description  :
@@ -129,8 +130,9 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     access_token = create_access_token(
         data={"sub": form_data.username}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
-
+    return {"access_token": access_token,
+            "token_type": "bearer",
+            "status": 'ok'}
 # -----------------------------调用接口取信息----------------------------------
 
 
@@ -178,7 +180,7 @@ async def get_current_active_user(current_user: schemas.UserInDB = Depends(get_c
     return current_user
 
 
-@loginUP.get("/users/me")
+@loginUP.get("/currentUser")
 async def read_users_me(current_user: schemas.UserInDB = Depends(get_current_active_user)):
     """
     @description  :
@@ -188,4 +190,57 @@ async def read_users_me(current_user: schemas.UserInDB = Depends(get_current_act
     @Returns  :
     -------
     """
+    current_user.status = 'ok'
+    current_user.name = 'zono'
+    current_user.data = 'zono'
+    #     name: 'Serati Ma',
+    #     avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+    #     userid: '00000001',
+    #     email: 'antdesign@alipay.com',
+    #     signature: '海纳百川，有容乃大',
+    #     title: '交互专家',
+    #     group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
+    #     tags: [
+    #         {
+    #           key: '0',
+    #             label: '很有想法的',
+    #         },
+    #         {
+    #             key: '1',
+    #             label: '专注设计',
+    #         },
+    #         {
+    #             key: '2',
+    #             label: '辣~',
+    #         },
+    #         {
+    #             key: '3',
+    #             label: '大长腿',
+    #         },
+    #         {
+    #             key: '4',
+    #             label: '川妹子',
+    #         },
+    #         {
+    #             key: '5',
+    #             label: '海纳百川',
+    #         },
+    #     ],
+    #     notifyCount: 12,
+    #     unreadCount: 11,
+    #     country: 'China',
+    #     access: getAccess(),
+    #     geographic: {
+    #         province: {
+    #             label: '浙江省',
+    #             key: '330000',
+    #         },
+    #         city: {
+    #             label: '杭州市',
+    #             key: '330100',
+    #         },
+    #     },
+    #     address: '西湖区工专路 77 号',
+    #     phone: '0752-268888888',
+    # }
     return current_user
