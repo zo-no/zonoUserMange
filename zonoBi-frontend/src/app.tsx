@@ -11,6 +11,7 @@ import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDrop
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+const registerPath = '/user/reg';
 
 /**
  * 渲染主函数，初始化时获取用户信息
@@ -29,8 +30,10 @@ export async function getInitialState(): Promise<{
       });
       return msg.data;
     } catch (error) {
-      // console.log(32);
-      history.push(loginPath);
+      if (location.pathname !== registerPath && location.pathname !== loginPath) {
+        // console.log(32);
+        history.push(loginPath);
+      }
     }
     return undefined;
   };
@@ -68,11 +71,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         // console.log(72);
-        history.push(loginPath);
+        history.push(loginPath); // 如果没有登录，重定向到 login
       }
+      return;
     },
     layoutBgImgList: [
       {

@@ -1,12 +1,11 @@
 import Footer from '@/components/Footer';
-import { login } from '@/services/ant-design-pro/api';
+import { register } from '@/services/ant-design-pro/api';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { LoginForm, ProFormCheckbox, ProFormText } from '@ant-design/pro-components';
+import { LoginForm, ProFormText } from '@ant-design/pro-components';
 import { useEmotionCss } from '@ant-design/use-emotion-css';
-import { Helmet, history, useModel } from '@umijs/max';
+import { Helmet, history } from '@umijs/max';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
-import { flushSync } from 'react-dom';
 import Settings from '../../../../config/defaultSettings';
 
 const Lang = () => {
@@ -41,8 +40,8 @@ const LoginMessage: React.FC<{
 };
 const Login: React.FC = () => {
   const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
-  const [type, setType] = useState<string>('account');
-  const { initialState, setInitialState } = useModel('@@initialState');
+  const [type, setType] = useState<string>('register');
+  // const { initialState, setInitialState } = useModel('@@initialState');
   const containerClassName = useEmotionCss(() => {
     return {
       display: 'flex',
@@ -54,38 +53,44 @@ const Login: React.FC = () => {
       backgroundSize: '100% 100%',
     };
   });
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
-      flushSync(() => {
-        setInitialState((s) => ({
-          ...s,
-          currentUser: userInfo,
-        }));
-      });
+  // const fetchUserInfo = async () => {
+  //   const userInfo = await initialState?.fetchUserInfo?.();
+  //   if (userInfo) {
+  //     flushSync(() => {
+  //       setInitialState((s) => ({
+  //         ...s,
+  //         currentUser: userInfo,
+  //       }));
+  //     });
+  //   }
+  // };
+  const handleSubmit = async (values: API.Register) => {
+    //校验
+    const { username, password, checkpassword } = values;
+    if (password !== checkpassword) {
+      console.error('两次密码不一致');
     }
-  };
-  const handleSubmit = async (values: API.GetToken) => {
+
     try {
-      // 登录
-      const msg = await login({
+      // 注册
+      const msg = await register({
         ...values,
         // type,
       });
-      localStorage.setItem('token', msg.access_token);
-      if (msg.status === 'ok') {
-        const defaultLoginSuccessMessage = '登录成功！';
+      if (msg.detail === '成功创建用户') {
+        const defaultLoginSuccessMessage = '成功注册！';
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get('redirect') || '/');
+        // TODO完成注册后自动登录
+        // await fetchUserInfo();
+        history.push('/user/login'); //跳转到登录页面
         return;
       }
       // console.log(msg);
       // 如果失败去设置用户错误信息
+      // TODO有些小问题
       setUserLoginState(msg);
     } catch (error) {
-      const defaultLoginFailureMessage = '登录失败，请重试！';
+      const defaultLoginFailureMessage = '注册失败，请重试！';
       console.log(error);
       message.error(defaultLoginFailureMessage);
     }
@@ -93,9 +98,10 @@ const Login: React.FC = () => {
   const { status, type: loginType } = userLoginState;
   return (
     <div className={containerClassName}>
+      {/* QUER 非常神奇的问题，注释后又解开，居然会报错 */}
       <Helmet>
         <title>
-          {'登录'}- {Settings.title}
+          {'注册'}- {Settings.title}
         </title>
       </Helmet>
       <Lang />
@@ -116,10 +122,14 @@ const Login: React.FC = () => {
           initialValues={{
             autoLogin: true,
           }}
-          //TODO actions={['其他登录方式 :', <ActionIcons key="icons" />]}
           onFinish={async (values) => {
-            await handleSubmit(values as API.GetToken);
+            await handleSubmit(values as API.Register);
           }}
+          submitter={{
+            searchConfig: {
+              submitText: '注册',
+            },
+          }} //看源码发现的
         >
           <Tabs
             activeKey={type}
@@ -127,20 +137,17 @@ const Login: React.FC = () => {
             centered
             items={[
               {
-                key: 'account',
-                label: '账户密码登录',
+                key: 'register',
+                label: '注册账户',
               },
-              // {
-              //   key: 'mobile',
-              //   label: '手机号登录',
-              // },
             ]}
           />
 
-          {status === 'error' && loginType === 'account' && (
+          {/* 注册区块 */}
+          {status === 'error' && loginType === 'register' && (
             <LoginMessage content={'错误的用户名和密码(admin/ant.design)'} />
           )}
-          {type === 'account' && (
+          {type === 'register' && (
             <>
               <ProFormText
                 name="username"
@@ -148,7 +155,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined />,
                 }}
-                placeholder={'用户名: admin or user,前后端:123'}
+                placeholder={'用户名'}
                 rules={[
                   {
                     required: true,
@@ -162,7 +169,21 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined />,
                 }}
-                placeholder={'密码: ant.design,前后端:123'}
+                placeholder={'密码'}
+                rules={[
+                  {
+                    required: true,
+                    message: '密码必填！',
+                  },
+                ]}
+              />
+              <ProFormText.Password
+                name="checkpassword"
+                fieldProps={{
+                  size: 'large',
+                  prefix: <LockOutlined />,
+                }}
+                placeholder={'密码'}
                 rules={[
                   {
                     required: true,
@@ -173,87 +194,19 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {/* TODO手机号登录区块 */}
-          {/* {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
-          {type === 'mobile' && (
-            <>
-              <ProFormText
-                fieldProps={{
-                  size: 'large',
-                  prefix: <MobileOutlined />,
-                }}
-                name="mobile"
-                placeholder={'请输入手机号！'}
-                rules={[
-                  {
-                    required: true,
-                    message: '手机号是必填项！',
-                  },
-                  {
-                    pattern: /^1\d{10}$/,
-                    message: '不合法的手机号！',
-                  },
-                ]}
-              />
-              <ProFormCaptcha
-                fieldProps={{
-                  size: 'large',
-                  prefix: <LockOutlined />,
-                }}
-                captchaProps={{
-                  size: 'large',
-                }}
-                placeholder={'请输入验证码！'}
-                captchaTextRender={(timing, count) => {
-                  if (timing) {
-                    return `${count} ${'秒后重新获取'}`;
-                  }
-                  return '获取验证码';
-                }}
-                name="captcha"
-                rules={[
-                  {
-                    required: true,
-                    message: '验证码是必填项！',
-                  },
-                ]}
-                onGetCaptcha={async (phone) => {
-                  const result = await getFakeCaptcha({
-                    phone,
-                  });
-                  if (!result) {
-                    return;
-                  }
-                  message.success('获取验证码成功！验证码为：1234');
-                }}
-              />
-            </>
-          )} */}
-
           <div
             style={{
               marginBottom: 24,
             }}
           >
-            <ProFormCheckbox noStyle name="autoLogin">
-              自动登录
-            </ProFormCheckbox>
-
             <a
               style={{
                 float: 'right',
               }}
-              href="/user/reg"
+              href="/user/login"
             >
-              注册
+              回到登录
             </a>
-            {/* <a
-              style={{
-                
-              }}
-            >
-              忘记密码 ?
-            </a> */}
           </div>
         </LoginForm>
       </div>

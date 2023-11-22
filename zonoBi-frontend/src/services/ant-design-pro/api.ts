@@ -4,9 +4,6 @@ import { request } from '@umijs/max';
 
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
-  //TODO: 获取token
-  // let tokenMsg =
-  // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJleHAiOjE3MDA2MzUzODd9.5nYAh-JB6QMIkllq9SE-jfA0WfCjqJMTNt7go8j1z4A';
   let token = localStorage.getItem('token');
   return request<{
     data: API.CurrentUser;
@@ -35,7 +32,7 @@ export async function outLogin(options?: { [key: string]: any }) {
  * @param options 请求配置选项
  * @returns 令牌响应数据
  */
-export async function login(body: API.getToken, options?: { [key: string]: any }) {
+export async function login(body: API.GetToken, options?: { [key: string]: any }) {
   const formData = new FormData();
 
   Object.keys(body).forEach((ele) => {
@@ -60,9 +57,22 @@ export async function login(body: API.getToken, options?: { [key: string]: any }
   });
 }
 
-// if (token) {
-//   localStorage.setItem("token", token.data)
-// }
+/** 注册接口 @description  :
+@param  :
+username:学号
+password:密码
+@Returns  :
+------- POST /api/v1/reg/ */
+export async function register(body: API.UserInDB, options?: { [key: string]: any }) {
+  return request<API.Response>('/api/v1/reg/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
 
 /** 此处后端没有提供注释 GET /api/notices */
 export async function getNotices(options?: { [key: string]: any }) {

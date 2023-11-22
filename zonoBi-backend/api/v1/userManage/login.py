@@ -110,7 +110,7 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 # --------------------------接口调用-------------------------------------
 
 
-@loginUP.post("/account", response_model=schemas.getToken, summary="获取Token")
+@loginUP.post("/account", response_model=schemas.GetToken, summary="获取Token")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """
     @description  :
@@ -164,7 +164,6 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
         raise credentials_exception
     return token_data
 
-# TODO post应该也有办法
 # ---------------------------------------------------------------
 
 

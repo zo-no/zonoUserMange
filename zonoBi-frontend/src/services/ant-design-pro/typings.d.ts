@@ -61,14 +61,23 @@ declare namespace API {
     status?: string;
   };
 
-  // type getToken = {
-  //   username?: string;
-  //   password?: string;
-  //   autoLogin?: boolean;
-  //   type?: string;
-  // };
+  type Register = {
+    /** Username */
+    username: string;
+    /** Password 密码 */
+    password: string;
+    checkpassword: string;
+  };
 
-  type getToken = {
+  type UserInDB = {
+    /** Username */
+    username: string;
+    /** Password 密码 */
+    password: string;
+  };
+  type RegisterResult = string;
+
+  type GetToken = {
     /** Grant Type */
     grant_type?: string;
     /** Username */
@@ -112,5 +121,9 @@ declare namespace API {
     datetime?: string;
     description?: string;
     type?: NoticeIconItemType;
+  };
+
+  type Response = {
+    detail?: string;
   };
 }
