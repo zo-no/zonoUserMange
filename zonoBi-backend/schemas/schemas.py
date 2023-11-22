@@ -13,13 +13,14 @@ from pydantic import BaseModel, Field
 # TODO pydantic校验用field，路径参数校验使用path，查询参数校验使用Query
 
 
-class Token(BaseModel):
+class getToken(BaseModel):
     """
     @description  :
-    返回给用户的Token
+    返回给用户的T
     """
     access_token: str
     token_type: str
+    status: str
 
 
 class UserBase(BaseModel):

@@ -61,11 +61,26 @@ declare namespace API {
     status?: string;
   };
 
-  type LoginParams = {
-    username?: string;
-    password?: string;
-    autoLogin?: boolean;
-    type?: string;
+  // type getToken = {
+  //   username?: string;
+  //   password?: string;
+  //   autoLogin?: boolean;
+  //   type?: string;
+  // };
+
+  type getToken = {
+    /** Grant Type */
+    grant_type?: string;
+    /** Username */
+    username: string;
+    /** Password */
+    password: string;
+    /** Scope */
+    scope?: string;
+    /** Client Id */
+    client_id?: string;
+    /** Client Secret */
+    client_secret?: string;
   };
 
   type ErrorResponse = {

@@ -7,9 +7,9 @@ import { request } from '@umijs/max';
 @param  :
 -------
 @Returns  :
-access_token POST /api/v1/token */
-export async function loginApiV1TokenPost(
-  body: API.BodyLoginApiV1TokenPost,
+access_token POST /api/v1/login/account */
+export async function loginApiV1LoginAccountPost(
+  body: API.BodyLoginApiV1LoginAccountPost,
   options?: { [key: string]: any },
 ) {
   const formData = new FormData();
@@ -30,7 +30,7 @@ export async function loginApiV1TokenPost(
     }
   });
 
-  return request<API.Token>('/api/v1/token', {
+  return request<API.Token>('/api/v1/login/account', {
     method: 'POST',
     data: formData,
     ...(options || {}),

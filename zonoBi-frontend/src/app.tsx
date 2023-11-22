@@ -8,11 +8,12 @@ import { history, Link } from '@umijs/max';
 import type { RequestConfig } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
-import { errorConfig } from './requestErrorConfig';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
+
 /**
+ * 渲染主函数，初始化时获取用户信息
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 export async function getInitialState(): Promise<{
@@ -28,6 +29,7 @@ export async function getInitialState(): Promise<{
       });
       return msg.data;
     } catch (error) {
+      // console.log(32);
       history.push(loginPath);
     }
     return undefined;
@@ -48,6 +50,7 @@ export async function getInitialState(): Promise<{
   };
 }
 
+// 首页页面配置
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
@@ -67,6 +70,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
+        // console.log(72);
         history.push(loginPath);
       }
     },
@@ -125,26 +129,15 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   };
 };
 
-const authHeaderInterceptor = (url: string, options: RequestConfig) => {
-  /*
-  @Description: 请求数据使用token
-  */
-  const authHeader = { Authorization: 'Bearer' };
-  return {
-    url: `${url}`,
-    options: { ...options, interceptors: true, headers: authHeader },
-  };
-};
-
 /**
  * @name request 配置，可以配置错误处理
  * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
  * @doc https://umijs.org/docs/max/request#配置
  */
 export const request: RequestConfig = {
-  ...errorConfig,
+  // ...errorConfig,
   //直接配置axios
   timeout: 1000,
-  baseURL: 'http://localhost:5000/api/v1', // 配置请求路径//TODO修改为线上环境
-  requestInterceptors: [authHeaderInterceptor], //TODO开发请求拦截器
+  baseURL: 'http://localhost:5000', // 配置请求路径//TODO修改为线上环境
+  // requestInterceptors: [authHeaderInterceptor], //TODO开发请求拦截器
 };

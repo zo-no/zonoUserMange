@@ -4,10 +4,18 @@ import { request } from '@umijs/max';
 
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
+  //TODO: 获取token
+  // let tokenMsg =
+  // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJleHAiOjE3MDA2MzUzODd9.5nYAh-JB6QMIkllq9SE-jfA0WfCjqJMTNt7go8j1z4A';
+  let token = localStorage.getItem('token');
   return request<{
     data: API.CurrentUser;
-  }>('/api/currentUser', {
+  }>('/api/v1/login/currentUser', {
     method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
     ...(options || {}),
   });
 }
@@ -18,62 +26,43 @@ export async function outLogin(options?: { [key: string]: any }) {
     method: 'POST',
     ...(options || {}),
   });
-};
-
-
-
-
-// function loginAPI(formData: any) {
-//   return 
-// };
-
-// async function getToken(body: API.LoginParams, options?: { [key: string]: any }) { 
-  /*
-  @Description: 获取token,并存入localStorage
-  */
-//   // console.log(body);
-//   const { username, password } = body;
-//   // console.log(username, password);
-//   const requestData = {
-//     grant_type: "",
-//     username,
-//     password,
-//     scope: "",
-//     client_id: "",
-//     client_secret: "",
-//   };
-//   console.log(requestData);
-//   //分布异步请求，并存入
-//   const res = await request('/token',{
-//         method: 'POST',
-//         data: requestData,
-//         headers: {
-//           'accept': "application/json",
-//           "Content-Type": "application/x-www-form-urlencoded",
-//         },
-//       });
-//   // console.log(res);
-//   return res.data.access_token;
-// }
+}
 
 /** 登录接口 POST /api/login/account */
-export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-  // let tokenMsg = getToken(body, options); //获取token
-  let tokenMsg = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjMiLCJleHAiOjE3MDA0MDg4NTl9.kIu0NrteMDEXUkNuVRzQygIy8wHp9kkntiwkyQ9HIy0";
-  console.log(tokenMsg);
-  // if (token) {
-  //   localStorage.setItem("token", token.data)
-  // }
-  return request('/users/me', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + tokenMsg,
-    },
-    // data: body,
+/**
+ * 获取令牌
+ * @param body 请求体参数
+ * @param options 请求配置选项
+ * @returns 令牌响应数据
+ */
+export async function login(body: API.getToken, options?: { [key: string]: any }) {
+  const formData = new FormData();
+
+  Object.keys(body).forEach((ele) => {
+    const item = (body as any)[ele];
+
+    if (item !== undefined && item !== null) {
+      if (typeof item === 'object' && !(item instanceof File)) {
+        if (item instanceof Array) {
+          item.forEach((f) => formData.append(ele, f || ''));
+        } else {
+          formData.append(ele, JSON.stringify(item));
+        }
+      } else {
+        formData.append(ele, item);
+      }
+    }
+  });
+  return request<API.Token>('/api/v1/login/account', {
+    method: 'POST',
+    data: formData,
     ...(options || {}),
   });
 }
+
+// if (token) {
+//   localStorage.setItem("token", token.data)
+// }
 
 /** 此处后端没有提供注释 GET /api/notices */
 export async function getNotices(options?: { [key: string]: any }) {

@@ -110,11 +110,11 @@ def create_access_token(data: dict, expires_delta: Union[timedelta, None] = None
 # --------------------------接口调用-------------------------------------
 
 
-@loginUP.post("/account", response_model=schemas.Token, summary="获取Token")
+@loginUP.post("/account", response_model=schemas.getToken, summary="获取Token")
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     """
     @description  :
-    登录接口,并返回Token
+    登录接口,设置过期时间,并返回Token和登录状态
     @param  :
     -------
     @Returns  :
@@ -132,7 +132,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     )
     return {"access_token": access_token,
             "token_type": "bearer",
-            "status": 'ok'}
+            "status": "ok"}
 # -----------------------------调用接口取信息----------------------------------
 
 

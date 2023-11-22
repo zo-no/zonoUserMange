@@ -99,13 +99,14 @@ const Login: React.FC = () => {
       });
     }
   };
-  const handleSubmit = async (values: API.LoginParams) => {
+  const handleSubmit = async (values: API.getToken) => {
     try {
       // 登录
       const msg = await login({
         ...values,
-        type,
+        // type,
       });
+      localStorage.setItem('token', msg.access_token);
       if (msg.status === 'ok') {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
@@ -151,7 +152,7 @@ const Login: React.FC = () => {
           }}
           actions={['其他登录方式 :', <ActionIcons key="icons" />]}
           onFinish={async (values) => {
-            await handleSubmit(values as API.LoginParams);
+            await handleSubmit(values as API.getToken);
           }}
         >
           <Tabs

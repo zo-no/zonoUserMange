@@ -6,9 +6,11 @@ declare namespace API {
     channels_id: number;
     /** Content */
     content: string;
+    /** Owner Id */
+    owner_id: number;
   };
 
-  type BodyLoginApiV1TokenPost = {
+  type BodyLoginApiV1LoginAccountPost = {
     /** Grant Type */
     grant_type?: string;
     /** Username */

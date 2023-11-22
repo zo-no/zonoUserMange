@@ -7,9 +7,9 @@ import { request } from '@umijs/max';
 @param  :
 -------
 @Returns  :
-------- GET /api/v1/users/me */
-export async function readUsersMeApiV1UsersMeGet(options?: { [key: string]: any }) {
-  return request<any>('/api/v1/users/me', {
+------- GET /api/v1/login/currentUser */
+export async function readUsersMeApiV1LoginCurrentUserGet(options?: { [key: string]: any }) {
+  return request<any>('/api/v1/login/currentUser', {
     method: 'GET',
     ...(options || {}),
   });

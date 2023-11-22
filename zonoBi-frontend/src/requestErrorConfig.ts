@@ -85,7 +85,8 @@ export const errorConfig: RequestConfig = {
     },
   },
 
-  // 请求拦截器
+  //TODO找到为什么会自动加查询参数了，回头检测一下
+  //请求拦截器
   requestInterceptors: [
     (config: RequestOptions) => {
       // 拦截请求配置，进行个性化处理。
