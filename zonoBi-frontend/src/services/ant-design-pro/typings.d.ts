@@ -14,7 +14,7 @@ declare namespace API {
     notifyCount?: number;
     unreadCount?: number;
     country?: string;
-    access?: string;
+    userRole?: boolean; // 用户角色
     geographic?: {
       province?: { label?: string; key?: string };
       city?: { label?: string; key?: string };

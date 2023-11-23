@@ -35,6 +35,7 @@ declare namespace API {
     access_token: string;
     /** Token Type */
     token_type: string;
+    status: string;
   };
 
   type User = {

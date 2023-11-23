@@ -15,6 +15,7 @@ v1 = APIRouter(prefix="/v1")
 # 用户管理接口
 v1.include_router(loginUP)  # 登录相关
 v1.include_router(reg)  # 注册相关
+# v1.include_router(userManage)  # 用户管理相关
 
 # 文章管理接口
 v1.include_router(articleOutput)

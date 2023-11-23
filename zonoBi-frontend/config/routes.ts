@@ -16,6 +16,7 @@ export default [
     routes: [
       { path: '/admin', redirect: '/admin/sub-page' },
       { path: '/admin/sub-page', component: './Admin' },
+      { path: '/admin/user-manage', name: '用户管理', component: './Admin/Usermange' },
     ],
   },
   { icon: 'table', path: '/list', component: './TableList', name: '表格页' },
