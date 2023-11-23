@@ -116,7 +116,10 @@ def index(request: Request):
     }
 
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# 挂了一个照片用于测试 http://localhost:5000/img/zono.jpg
+app.mount("/img", StaticFiles(directory="img"),
+          name="img")  # 静态文件的挂载，这样就可以访问静态文件了
+
 app.include_router(Router.router)  # 导入路由
 
 if __name__ == '__main__':

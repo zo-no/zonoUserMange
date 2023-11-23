@@ -13,6 +13,8 @@ from sqlalchemy.orm import Session
 from database.sqlite import engine, Base, SessionLocal
 from crud import crud
 from schemas import schemas
+import re
+from fastapi.staticfiles import StaticFiles
 
 
 reg = APIRouter()
@@ -49,14 +51,15 @@ def get_password_hash(password: str):
     return pwd_context.hash(password)
 
 
-def userPasswordCheck(userPassword):
+def validate_password(password: str) -> bool:
     """
     @description  :密码校验
     """
-    pass
+    pattern = r'^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*,\._])[0-9a-zA-Z!@#$%^&*,\\._]{8,12}$'
+    return re.match(pattern, password) is not None
 
 
-@reg.post("/reg/", response_model=schemas.User, summary="注册接口")
+@reg.post("/reg/", response_model=schemas.UserInDB, summary="注册接口")
 async def registration(user: schemas.UserInDB, db: Session = Depends(get_db)):
     """
     @description  :
@@ -71,13 +74,16 @@ async def registration(user: schemas.UserInDB, db: Session = Depends(get_db)):
     -------
     """
     # 先校验
-
-    # 查数据库
-    db_user = crud.get_user_by_username(db, username=user.username)
-    if db_user:
-        raise HTTPException(status_code=400, detail="该用户名已经被使用")
-    # 加密传入
-    # TODO盐值？
-    user.password = get_password_hash(user.password)
-    crud.create_user(db=db, user=user)
-    raise HTTPException(status_code=200, detail="成功创建用户")
+    # if (validate_password(user.password)):
+    if True:  # TODO暂时不校验密码
+        # 查数据库
+        db_user = crud.get_user_by_username(db, username=user.username)
+        if db_user:
+            raise HTTPException(status_code=400, detail="该用户名已经被使用")
+        # 加密传入
+        # TODO盐值？
+        user.password = get_password_hash(user.password)
+        created_user = crud.create_user(db=db, user=user)
+        raise HTTPException(status_code=200, detail="成功创建用户")
+    else:
+        raise HTTPException(status_code=400, detail="密码不符合规范")

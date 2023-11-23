@@ -3,12 +3,12 @@
 
 declare namespace API {
   type CurrentUser = {
-    name?: string;
-    avatar?: string;
-    userid?: string;
+    id?: int;
+    username?: string;
+    avatarUrl?: string;
+    phone?: string;
     email?: string;
     signature?: string;
-    title?: string;
     group?: string;
     tags?: { key?: string; label?: string }[];
     notifyCount?: number;
@@ -20,7 +20,6 @@ declare namespace API {
       city?: { label?: string; key?: string };
     };
     address?: string;
-    phone?: string;
   };
 
   type LoginResult = {

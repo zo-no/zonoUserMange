@@ -83,7 +83,7 @@ def authenticate_user(username: str, password: str, db):
         return False
     db_user = db.query(base.User).filter(
         base.User.username == username).first()
-    if not verify_password(password, db_user.hashed_password):
+    if not verify_password(password, db_user.userPassword):
         return False
     return user
 
@@ -167,20 +167,25 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
 # ---------------------------------------------------------------
 
 
-async def get_current_active_user(current_user: schemas.UserInDB = Depends(get_current_user)):
+async def get_current_active_user(current_user: schemas.UserRes = Depends(get_current_user)):
     """
     @description  :
-    检验用户权限
+    对获取的数据进行判断
+    1.是否为活跃用户
+    2.是否为管理员
     @param  :
     -------
     @Returns  :
     -------
     """
+    current_user.userPassword = None  # 删除密码字段
+    if current_user.isDelete != 0:
+        raise HTTPException(status_code=400, detail="用户已注销")
     return current_user
 
 
 @loginUP.get("/currentUser")
-async def read_users_me(current_user: schemas.UserInDB = Depends(get_current_active_user)):
+async def read_users_me(current_user: schemas.UserRes = Depends(get_current_active_user)):
     """
     @description  :
     一般用户
@@ -189,9 +194,6 @@ async def read_users_me(current_user: schemas.UserInDB = Depends(get_current_act
     @Returns  :
     -------
     """
-    current_user.status = 'ok'
-    current_user.name = 'zono'
-    current_user.data = 'zono'
     #     name: 'Serati Ma',
     #     avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
     #     userid: '00000001',

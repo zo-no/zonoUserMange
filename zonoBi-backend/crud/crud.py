@@ -46,14 +46,14 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
 def create_user(db: Session, user: schemas.UserInDB):
     """
     @description  :
-    创建用户,it's really hash
+    创建用户,只创建用户,不设置基础信息
     @param  :
     -------
     @Returns  :
     -------
     """
     db_user = base.User(username=user.username,
-                        hashed_password=user.password)  # TODO后面用解包的方式导入数据
+                        userPassword=user.password)  # TODO后面用解包的方式导入数据
     db.add(db_user)  # 见过实例添加到数据库，和上传github很像
     db.commit()  # 对数据库提交
     db.refresh(db_user)  # 刷新实例，例如会生成ID

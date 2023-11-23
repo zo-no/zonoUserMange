@@ -10,6 +10,7 @@ import defaultSettings from '../config/defaultSettings';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 const isDev = process.env.NODE_ENV === 'development';
+// 无需登录白名单，待升级
 const loginPath = '/user/login';
 const registerPath = '/user/reg';
 
