@@ -73,6 +73,8 @@ const Login: React.FC = () => {
 
     try {
       // 注册
+      console.log(values);
+
       const msg = await register({
         ...values,
         // type,
@@ -151,6 +153,7 @@ const Login: React.FC = () => {
             <>
               <ProFormText
                 name="username"
+                label="username"
                 fieldProps={{
                   size: 'large',
                   prefix: <UserOutlined />,
@@ -165,6 +168,7 @@ const Login: React.FC = () => {
               />
               <ProFormText.Password
                 name="password"
+                label="password"
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined />,
@@ -175,21 +179,37 @@ const Login: React.FC = () => {
                     required: true,
                     message: '密码必填！',
                   },
+                  {
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+                    message: '密码至少8位，且必须包含大小写字母和数字！',
+                  },
                 ]}
+                hasFeedback
               />
               <ProFormText.Password
                 name="checkpassword"
+                label="checkpassword"
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined />,
                 }}
-                placeholder={'密码'}
+                placeholder={'确认密码'}
+                dependencies={['password']}
                 rules={[
                   {
                     required: true,
                     message: '密码必填！',
                   },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('您输入的新密码不匹配！'));
+                    },
+                  }),
                 ]}
+                hasFeedback
               />
             </>
           )}

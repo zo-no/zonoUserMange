@@ -55,7 +55,7 @@ def validate_password(password: str) -> bool:
     """
     @description  :密码校验
     """
-    pattern = r'^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*,\._])[0-9a-zA-Z!@#$%^&*,\\._]{8,12}$'
+    pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$'
     return re.match(pattern, password) is not None
 
 
@@ -74,8 +74,8 @@ async def registration(user: schemas.UserInDB, db: Session = Depends(get_db)):
     -------
     """
     # 先校验
-    # if (validate_password(user.password)):
-    if True:  # TODO暂时不校验密码
+    if (validate_password(user.password)):
+        # if True:  # TODO暂时不校验密码
         # 查数据库
         db_user = crud.get_user_by_username(db, username=user.username)
         if db_user:
