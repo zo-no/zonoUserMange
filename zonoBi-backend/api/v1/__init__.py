@@ -7,15 +7,21 @@
 用户登录注册
 '''
 from fastapi import APIRouter
-from .userManage import *
+from .userinit import *
+# from .userManage import *
 from .articleManage import *
 
 v1 = APIRouter(prefix="/v1")
 
-# 用户管理接口
+# 用户初始化接口
 v1.include_router(loginUP)  # 登录相关
 v1.include_router(reg)  # 注册相关
-# v1.include_router(userManage)  # 用户管理相关
+v1.include_router(currentUser)  # 用户管理相关
+
+
+# 用户管理接口
+# v1.include_router(currentUsers)  # 获取多名用户信息
+
 
 # 文章管理接口
 v1.include_router(articleOutput)

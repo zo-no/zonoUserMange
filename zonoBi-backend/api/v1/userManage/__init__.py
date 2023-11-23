@@ -2,10 +2,7 @@
 '''
 @Date		:2023/10/06 15:57:53
 @Author		:zono
-@Description:用户管理api库
-1、注册
-2、登录验证
+@Description:用户管理有关
 '''
 
-from .login import loginUP
-from .registration import reg
+from .currentUsers import currentUsers
