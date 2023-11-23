@@ -25,26 +25,18 @@ declare namespace API {
     client_secret?: string;
   };
 
-  type HTTPValidationError = {
-    /** Detail */
-    detail?: ValidationError[];
-  };
-
-  type Token = {
+  type GetToken = {
     /** Access Token */
     access_token: string;
     /** Token Type */
     token_type: string;
+    /** Status */
     status: string;
   };
 
-  type User = {
-    /** Username */
-    username: string;
-    /** Id */
-    id: number;
-    /** Is Active */
-    is_active: boolean;
+  type HTTPValidationError = {
+    /** Detail */
+    detail?: ValidationError[];
   };
 
   type UserInDB = {

@@ -8,7 +8,7 @@
 '''
 from fastapi import APIRouter
 from .userinit import *
-# from .userManage import *
+from .userManage import *
 from .articleManage import *
 
 v1 = APIRouter(prefix="/v1")
@@ -20,7 +20,7 @@ v1.include_router(currentUser)  # 用户管理相关
 
 
 # 用户管理接口
-# v1.include_router(currentUsers)  # 获取多名用户信息
+v1.include_router(currentUsers)  # 获取多名用户信息
 
 
 # 文章管理接口

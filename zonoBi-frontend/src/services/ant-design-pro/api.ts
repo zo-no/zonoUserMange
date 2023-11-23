@@ -7,7 +7,7 @@ export async function currentUser(options?: { [key: string]: any }) {
   let token = localStorage.getItem('token');
   return request<{
     data: API.CurrentUser;
-  }>('/api/v1/login/currentUser', {
+  }>('/api/v1/currentUser', {
     method: 'GET',
     headers: {
       Accept: 'application/json',

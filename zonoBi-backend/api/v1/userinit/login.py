@@ -24,7 +24,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-loginUP = APIRouter(prefix="/login")
+loginUP = APIRouter(prefix="/login", tags=["用户初始化"])
 
 Base.metadata.create_all(bind=engine)
 

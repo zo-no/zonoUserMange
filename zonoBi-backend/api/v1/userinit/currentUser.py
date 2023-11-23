@@ -24,7 +24,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-currentUser = APIRouter()
+currentUser = APIRouter(tags=["用户初始化"])
 
 Base.metadata.create_all(bind=engine)
 
@@ -95,13 +95,13 @@ async def get_current_active_user(current_user: schemas.UserRes = Depends(get_cu
     @Returns  :
     -------
     """
-    current_user.userPassword = None  # 删除密码字段
+    del current_user.__dict__['userPassword']  # 删除密码字段
     if current_user.isDelete != 0:
         raise HTTPException(status_code=400, detail="用户已注销")
     return current_user
 
 
-@currentUser.get("/currentUser")
+@currentUser.get("/currentUser", summary="获取当前用户")
 async def read_users_me(current_user: schemas.UserRes = Depends(get_current_active_user)):
     """
     @description  :

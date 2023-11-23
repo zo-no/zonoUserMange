@@ -17,7 +17,7 @@ import re
 from fastapi.staticfiles import StaticFiles
 
 
-reg = APIRouter()
+reg = APIRouter(tags=["用户初始化"])
 
 Base.metadata.create_all(bind=engine)
 
