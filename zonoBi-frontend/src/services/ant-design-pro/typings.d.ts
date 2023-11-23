@@ -37,7 +37,7 @@ declare namespace API {
     key?: number;
     disabled?: boolean;
     href?: string;
-    avatar?: string;
+    avatarUrl?: string;
     name?: string;
     owner?: string;
     desc?: string;
@@ -114,7 +114,7 @@ declare namespace API {
     extra?: string;
     key?: string;
     read?: boolean;
-    avatar?: string;
+    avatarUrl?: string;
     title?: string;
     status?: string;
     datetime?: string;

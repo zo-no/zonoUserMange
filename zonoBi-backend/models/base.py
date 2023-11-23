@@ -90,7 +90,7 @@ class User(Base):  # 元类
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     username = Column(String, unique=True, index=True, nullable=False)  # 用户名
     avatarUrl = Column(
-        String, default="http://localhost:5000/img/zono.jpg")  # 头像
+        String, default="https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png")  # 头像
     userPassword = Column(String, nullable=False)  # 密码 varchar
     phone = Column(Integer)
     email = Column(String)
