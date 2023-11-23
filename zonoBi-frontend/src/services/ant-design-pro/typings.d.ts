@@ -91,6 +91,14 @@ declare namespace API {
     client_secret?: string;
   };
 
+  type putToken = {
+    /** Access Token */
+    access_token: string;
+    /** Token Type */
+    token_type: string;
+    /** Status */
+    status: string;
+  };
   type ErrorResponse = {
     /** 业务约定的错误码 */
     errorCode: string;

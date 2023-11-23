@@ -51,7 +51,7 @@ export async function login(body: API.GetToken, options?: { [key: string]: any }
     }
   });
 
-  return request<API.Token>('/api/v1/login/account', {
+  return request<API.putToken>('/api/v1/login/account', {
     method: 'POST',
     data: formData,
     ...(options || {}),
