@@ -4,6 +4,7 @@
 @Author		:zono
 @Description:用户初始化接口
 '''
-from .login import loginUP
-from .registration import reg
-from .currentUser import currentUser
+from .login import loginUP  # 登录
+from .registration import reg  # 注册
+from .currentUser import currentUser  # 获取当前用户
+from .logout import logOUT  # 退出登录

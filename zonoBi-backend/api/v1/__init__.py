@@ -15,6 +15,7 @@ v1 = APIRouter(prefix="/v1")
 
 # 用户初始化接口
 v1.include_router(loginUP)  # 登录相关
+v1.include_router(logOUT)  # 退出登录
 v1.include_router(reg)  # 注册相关
 v1.include_router(currentUser)  # 用户管理相关
 
