@@ -14,7 +14,6 @@ from database.sqlite import engine, Base, SessionLocal
 from crud import crud
 from schemas import schemas
 import re
-from fastapi.staticfiles import StaticFiles
 
 
 reg = APIRouter(tags=["用户初始化"])
@@ -59,7 +58,7 @@ def validate_password(password: str) -> bool:
     return re.match(pattern, password) is not None
 
 
-@reg.post("/reg/", response_model=schemas.UserInDB, summary="注册接口")
+@reg.post("/reg/", summary="注册接口")
 async def registration(user: schemas.UserInDB, db: Session = Depends(get_db)):
     """
     @description  :

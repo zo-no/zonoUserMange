@@ -29,13 +29,11 @@ currentUser = APIRouter(tags=["用户初始化"])
 Base.metadata.create_all(bind=engine)
 
 # TODO 加入配置文件中------------------------初始化设置---------------------------------------
-SECRET_KEY = "efb8d310a2e46e859a8e2f196ad25ff41916c90828999d64d50699f4f6cae93c"  # TODO 加入配置中
+SECRET_KEY = "efb8d310a2e46e859a8e2f196ad25ff41916c90828999d64d50699f4f6cae93c"
 ALGORITHM = "HS256"  # 算法变量
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 过期时间
 
 
-pwd_context = CryptContext(
-    schemes=["bcrypt"], deprecated="auto")  # 使用bcrypt算法对密码加密
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="/api/v1/login/account")  # 用户校验地址
 # 数据库的打开和关闭
@@ -62,7 +60,6 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
     @Returns  :
     -------
     """
-    # TODO 获取用户量可以设置,调整对应用户才能使用对应数据
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="无法验证凭据，可能是登录过期,或者用户已注销",  # TODO 日后完善
@@ -74,9 +71,7 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
         username: str = payload.get("sub")
         if username is None:
             raise credentials_exception
-        # XXX获取所有用户 token_data = crud.get_users(db, skip=0, limit=100)
         token_data = crud.get_user_by_username(db, username)
-        # TODO修改为只取对应用户
     except JWTError:
         raise credentials_exception
     return token_data

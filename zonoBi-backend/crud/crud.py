@@ -2,7 +2,7 @@
 '''
 @Date		:2023/10/04 22:26:59
 @Author		:zono
-@Description:对数据库的操作，#TODO接口对应操作
+@Description:对数据库的操作，增删改查
 '''
 
 from sqlalchemy.orm import Session
@@ -53,7 +53,7 @@ def create_user(db: Session, user: schemas.UserInDB):
     -------
     """
     db_user = base.User(username=user.username,
-                        userPassword=user.password)  # TODO后面用解包的方式导入数据
+                        userPassword=user.password)
     db.add(db_user)  # 见过实例添加到数据库，和上传github很像
     db.commit()  # 对数据库提交
     db.refresh(db_user)  # 刷新实例，例如会生成ID

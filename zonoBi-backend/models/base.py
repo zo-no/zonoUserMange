@@ -63,11 +63,9 @@ class Article(Base):
     content = Column(String, index=True)
     # owner_id = Column(Integer, ForeignKey("users.id"))
 
-    # TODO研究下relationship使用
     # owner = relationship("users", back_populates="Article")
 
 
-# TODO 解决表的实时变动
 class User(Base):  # 元类
     """
     @description  :

@@ -36,8 +36,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 过期时间
 
 pwd_context = CryptContext(
     schemes=["bcrypt"], deprecated="auto")  # 使用bcrypt算法对密码加密
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/api/v1/login/account")  # 用户校验地址
 
 
 # ---------------------------------------------------------------
