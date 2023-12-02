@@ -77,26 +77,17 @@ declare namespace API {
   type RegisterResult = string;
 
   type GetToken = {
-    /** Grant Type */
     grant_type?: string;
-    /** Username */
     username: string;
-    /** Password */
     password: string;
-    /** Scope */
     scope?: string;
-    /** Client Id */
     client_id?: string;
-    /** Client Secret */
     client_secret?: string;
   };
 
   type putToken = {
-    /** Access Token */
     access_token: string;
-    /** Token Type */
     token_type: string;
-    /** Status */
     status: string;
   };
   type ErrorResponse = {

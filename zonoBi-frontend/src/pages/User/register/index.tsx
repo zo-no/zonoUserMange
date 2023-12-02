@@ -106,6 +106,7 @@ const Login: React.FC = () => {
           {'注册'}- {Settings.title}
         </title>
       </Helmet>
+
       <Lang />
       <div
         style={{
